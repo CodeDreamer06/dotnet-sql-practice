@@ -38,4 +38,3 @@ E:\Abhinav\DotNet-SQLite\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp3.0\
 E:\Abhinav\DotNet-SQLite\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
 E:\Abhinav\DotNet-SQLite\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp3.0\System.Windows.Extensions.dll
 E:\Abhinav\DotNet-SQLite\obj\Debug\netcoreapp3.1\DotNet-SQLite.csproj.CopyComplete
-E:\Abhinav\DotNet-SQLite\bin\Debug\netcoreapp3.1\Dapper.dll

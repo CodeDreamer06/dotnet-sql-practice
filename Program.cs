@@ -13,9 +13,10 @@ namespace DotNet_SQLite
           if (!File.Exists(@"abhinav.db")) {
             SQLiteConnection.CreateFile("abhinav.db");
           }
-          SqlAccess.createTable();
-          SqlAccess.AddLog(5);
-          SqlAccess.AddLog(10);
+          // SqlAccess.createTable();
+          // SqlAccess.AddLog(5);
+          // SqlAccess.AddLog(10);
+          SqlAccess.getLogs();
         }
     }
 }
