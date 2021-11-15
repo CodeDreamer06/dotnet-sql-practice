@@ -1,4 +1,3 @@
-// Data Source=c:\mydb.db;Version=3;
 ﻿using System;
 using System.IO;
 using System.Data;
@@ -20,6 +19,8 @@ show: display existing logs";
             SQLiteConnection.CreateFile("abhinav.db");
           }
 
+          // SqlAccess.checkIfTableExists();
+
           Console.WriteLine("Hi there! Type a command to get started");
           while(true) {
             command = Console.ReadLine().ToLower();
@@ -31,7 +32,13 @@ show: display existing logs";
               Console.WriteLine(help);
 
             else if(command.StartsWith("add")){
-              int hours = Convert.ToInt32(command.Split("add")[1]);
+              int hours = 0;
+              try {
+                hours = Convert.ToInt32(command.Split("add")[1]);
+              }
+              catch(System.FormatException) {
+                Console.WriteLine("Add commands should be in this format: 'add [number]'. \nFor example: 'add 5' means 5 hours");
+              }
               SqlAccess.AddLog(hours);
             }
 
