@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Data;
 using System.Data.SQLite;
@@ -19,8 +19,7 @@ show: display existing logs";
             SQLiteConnection.CreateFile("abhinav.db");
           }
 
-          // SqlAccess.checkIfTableExists();
-
+          SqlAccess.createTable();
           Console.WriteLine("Hi there! Type a command to get started");
           while(true) {
             command = Console.ReadLine().ToLower();
