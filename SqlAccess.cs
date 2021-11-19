@@ -22,10 +22,13 @@ namespace DotNet_SQLite
 
     public static void getTimedLogs(string day) {
       DateTime today = DateTime.Today;
+      DateTime tomorrow = today.AddDays(-1);
+      string dateToday = $"{today.Year}-{today.Month}-{today.Day}";
+      string dateTomorrow = $"{tomorrow.Year}-{tomorrow.Month}-{tomorrow.Day}";
       if(day == "today")
-        getLogs($"select * from logs WHERE created_at = {today.ToString("MM/dd/yyyy hh:mm:ss") + " AM"};");
+        getLogs($"select * from logs WHERE created_at = \"{dateToday}\";");
       if(day == "yesterday")
-      getLogs($"select * from logs WHERE created_at = {today.AddDays(-1).ToString("MM/dd/yyyy hh:mm:ss") + " AM"};");
+        getLogs($"select * from logs WHERE created_at = \"{dateTomorrow}\";");
     }
 
     public static void getLogs(string query = @"select * from logs") {

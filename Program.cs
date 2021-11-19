@@ -60,7 +60,7 @@ Also, please note that you can't add 0 hours or more than the hours possible on 
                 continue;
               }
 
-              string day = Helpers.splitString(command, "show", "show commands should be in this format: 'show [today, yesterday or date]. \nFor example: 'show today' shows logs from today");
+              string day = Helpers.splitString(command, "show ", "show commands should be in this format: 'show [today, yesterday or date]. \nFor example: 'show today' shows logs from today");
               SqlAccess.getTimedLogs(day);
             }
 
