@@ -22,10 +22,13 @@ namespace DotNet_SQLite
 
     public static void getTimedLogs(string day) {
       DateTime today = DateTime.Today;
+      DateTime tomorrow = today.AddDays(-1);
+      string dateToday = $"{today.Year}-{today.Month}-{today.Day}";
+      string dateTomorrow = $"{tomorrow.Year}-{tomorrow.Month}-{tomorrow.Day}";
       if(day == "today")
-        getLogs($"select * from logs WHERE created_at = {today.ToString("MM/dd/yyyy hh:mm:ss") + " AM"};");
+        getLogs($"select * from logs WHERE created_at = \"{dateToday}\";");
       if(day == "yesterday")
-      getLogs($"select * from logs WHERE created_at = {today.AddDays(-1).ToString("MM/dd/yyyy hh:mm:ss") + " AM"};");
+        getLogs($"select * from logs WHERE created_at = \"{dateTomorrow}\";");
     }
 
     public static void getLogs(string query = @"select * from logs") {
@@ -56,7 +59,7 @@ namespace DotNet_SQLite
     }
 
     public static void AddLog(int hours) {
-      if(hours == 0 || hours > 24) return; // Logging 0 hours isn't required, neither can you code more than 24 hours a day
+      if(hours == 0 || hours > DateTime.Now.Hour) return; // Logging 0 hours isn't required, neither you code more than the number of hours already passed in the day
       execute($"INSERT INTO logs(hours) VALUES({hours});");
     }
 
