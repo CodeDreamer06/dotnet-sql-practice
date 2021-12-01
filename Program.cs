@@ -12,19 +12,17 @@ namespace DotNet_SQLite
           Console.ForegroundColor = ConsoleColor.White;
           var command = "";
           const string help = @"
-# Code Time
-  A simple code time manager for you to measure your progress!
+# Welcome to Code Time!
+  It's a simple code time manager to measure your progress!
 * exit or 0: stop the program
-* show: display existing logs ('today', 'yesterday' or a date can optionally be specified)
+* show: display logs
 * add [hours]: insert data into the database
-* remove: delete the last recent log (A log id can optionally be specified)
-* update [id] [hours]: change existing data in the database
-
-Also, please note that you can't add 0 hours or more than the hours possible on that day (You can't add more than 6 hours for example, if it's 6:00AM)
+* update [id] [hours]: change existing data
+* remove [id]: delete a log
 ";
           SqlAccess.createTable();
           Console.ForegroundColor = ConsoleColor.Cyan;
-          Console.WriteLine("Welcome to CodeTime! Type a command to get started");
+          Console.WriteLine(help);
           Console.ForegroundColor = ConsoleColor.Green;
           while(true) {
             command = Console.ReadLine().ToLower();
@@ -34,14 +32,14 @@ Also, please note that you can't add 0 hours or more than the hours possible on 
               break;
 
             else if(command == "help") {
-              Console.ForegroundColor = ConsoleColor.Yellow;
+              Console.ForegroundColor = ConsoleColor.Cyan;
               Console.WriteLine(help);
-              Console.ForegroundColor = ConsoleColor.White;
+              Console.ForegroundColor = ConsoleColor.Green;
             }
 
             else if(command.StartsWith("add")){
-              int hours = Helpers.splitInteger(command, "add", "Add commands should be in this format: 'add [number]'. \nFor example: 'add 5' means 5 hours");
-              SqlAccess.AddLog(hours);
+              TimeSpan duration = Helpers.splitTime(command, "add", "Add commands should be in this format: 'add [duration]'. \nFor example: 'add 5:30' means 5 hours and 30 minutes");
+              SqlAccess.AddLog(duration);
             }
 
             else if(command.StartsWith("remove")){

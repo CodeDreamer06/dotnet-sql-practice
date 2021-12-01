@@ -36,10 +36,17 @@ namespace DotNet_SQLite
         con.Open();
         using var cmd = new SQLiteCommand(query, con);
         SQLiteDataReader reader = cmd.ExecuteReader();
+        var readCount = 0;
         while (reader.Read()){
-          string suffix = (int) reader["hours"] == 1 ? " hour" : " hours";
+          Console.WriteLine(reader["hours"]);
+          var rawDuration = new DateTime(long.Parse((string) reader["hours"]));
+          // var rawDuration = new DateTime(long.Parse(reader["hours"].ToString()));
+          string hoursSuffix = rawDuration.Hour == 1 ? " hour" : " hours";
+          string minuteSuffix = rawDuration.Minute == 1 ? " minute" : " minutes";
           var time = Convert.ToDateTime(reader["created_at"]).ToString().Split()[0];
-          Console.WriteLine($"Log {reader["id"]}: {reader["hours"]}{suffix} on {time}");
+          var duration = rawDuration.Hour + hoursSuffix + " " + rawDuration.Minute + minuteSuffix;
+          Console.WriteLine($"Log {reader["id"]}: {duration} on {time}");
+          readCount += 1;
         }
       }
     }
@@ -58,21 +65,29 @@ namespace DotNet_SQLite
       }
     }
 
-    public static void AddLog(int hours) {
-      if(hours == 0 || hours > DateTime.Now.Hour) return; // Logging 0 hours isn't required, neither you code more than the number of hours already passed in the day
-      execute($"INSERT INTO logs(hours) VALUES({hours});");
+    public static void AddLog(TimeSpan duration) {
+      if(duration.Hours == 0 || duration.Hours > DateTime.Now.Hour) return; // Logging 0 hours isn't required, neither you code more than the number of hours already passed in the day
+      execute($"INSERT INTO logs(hours) VALUES({duration.Ticks});");
+      Console.WriteLine("Your hours have been logged!");
+      getLogs(@"select * from logs ORDER BY id DESC LIMIT 5");
     }
 
     public static void removeLog(int index) {
       execute($"DELETE FROM logs WHERE id = {index};");
+      Console.WriteLine($"Log at {index} has been removed.");
+      getLogs(@"select * from logs ORDER BY id DESC LIMIT 5");
     }
 
     public static void removeLastLog() {
       execute(@"DELETE FROM logs WHERE id = (SELECT MAX(id) FROM logs);");
+      Console.WriteLine("The last log has been removed.");
+      getLogs(@"select * from logs ORDER BY id DESC LIMIT 3");
     }
 
     public static void updateLog(int id, int hours) {
       execute($"UPDATE logs SET hours = {hours}  WHERE id = {id}");
+      Console.WriteLine("Updated successfully.");
+      getLogs($"select * from logs WHERE id BETWEEN {id - 2} and {id + 2}");
     }
   }
 }
