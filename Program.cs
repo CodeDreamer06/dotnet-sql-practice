@@ -20,7 +20,7 @@ namespace DotNet_SQLite
 * update [id] [hours]: change existing data
 * remove [id]: delete a log
 ";
-          SqlAccess.createTable();
+          SqlAccess.CreateTable();
           Console.ForegroundColor = ConsoleColor.Cyan;
           Console.WriteLine(help);
           Console.ForegroundColor = ConsoleColor.Green;
@@ -28,8 +28,10 @@ namespace DotNet_SQLite
             command = Console.ReadLine().ToLower();
             Console.ForegroundColor = ConsoleColor.Green;
 
-            if(command == "exit" || command == "0")
+            if(command == "exit" || command == "0") {
+              Console.ForegroundColor = ConsoleColor.White;
               break;
+            }
 
             else if(command == "help") {
               Console.ForegroundColor = ConsoleColor.Cyan;
@@ -44,32 +46,34 @@ namespace DotNet_SQLite
 
             else if(command.StartsWith("remove")){
               if(command == "remove") {
-                SqlAccess.removeLastLog();
+                SqlAccess.RemoveLastLog();
                 continue;
               }
 
               int id = Helpers.splitInteger(command, "remove", "Add commands should be in this format: 'remove [id]'. \nFor example: 'remove 3' deletes the third log");
-              SqlAccess.removeLog(id);
+              SqlAccess.RemoveLog(id);
             }
 
             else if(command.StartsWith("show")) {
               if(command == "show") {
-                SqlAccess.getLogs();
+                SqlAccess.GetLogs();
                 continue;
               }
 
               string day = Helpers.splitString(command, "show ", "show commands should be in this format: 'show [today, yesterday or date]. \nFor example: 'show today' shows logs from today");
-              SqlAccess.getTimedLogs(day);
+              SqlAccess.GetTimedLogs(day);
             }
 
             else if(command.StartsWith("update")) {
               var splitCommand = command.Split();
+              var commandWithoutId = splitCommand[0] + ' ' + splitCommand[2];
               try {
-                SqlAccess.updateLog(Convert.ToInt32(splitCommand[1]), Convert.ToInt32(splitCommand[2]));
+                TimeSpan duration = Helpers.splitTime(commandWithoutId, "update", "update commands should be in this format: 'update [log id] [duration]''. \nFor example: 'update 3 8:30' changes the duration to 8:30 in row 3");
+                SqlAccess.UpdateLog(Convert.ToInt32(splitCommand[1]), duration);
               }
               catch(System.IndexOutOfRangeException) {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("update commands should be in this format: 'update [log id] [hours]. \nFor example: 'update 3 8' changes the number of hours in row 3");
+                Console.WriteLine("update commands should be in this format: 'update [log id] [hours]''. \nFor example: 'update 3 8' changes the number of hours in row 3");
                 Console.ForegroundColor = ConsoleColor.White;
               }
             }
